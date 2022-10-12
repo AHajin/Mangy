@@ -1,13 +1,28 @@
 package com.tubyapp.tuby.Employee;
 
+import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.Period;
 
+@Entity
+@Table
 public class Employee {
+    @Id
+    @SequenceGenerator(name = "employee_sequence",
+            sequenceName = "employee_sequence",
+            allocationSize = 1
+    )
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,
+    generator = "employee_sequence"
+    )
     private Long id;
     private String name;
     private LocalDate DateOfBirth;
+    @Transient
     private Integer Age;
+    private String Company;
     private String Job;
+
 
     public Long getId() {
         return id;
@@ -19,6 +34,14 @@ public class Employee {
 
     public String getName() {
         return name;
+    }
+
+    public String getCompany() {
+        return Company;
+    }
+
+    public void setCompany(String company) {
+        this.Company = company;
     }
 
     public void setName(String name) {
@@ -34,7 +57,7 @@ public class Employee {
     }
 
     public Integer getAge() {
-        return Age;
+        return Period.between(DateOfBirth, LocalDate.now()).getYears();
     }
 
     public void setAge(Integer age) {
@@ -56,22 +79,22 @@ public class Employee {
     public Employee(Long id,
                     String name,
                     LocalDate dateOfBirth,
-                    Integer age,
+                    String company,
                     String job) {
         this.id = id;
         this.name = name;
         DateOfBirth = dateOfBirth;
-        Age = age;
+        Company = company;
         Job = job;
     }
 
     public Employee(String name,
                     LocalDate dateOfBirth,
-                    Integer age,
+                    String company,
                     String job) {
         this.name = name;
         DateOfBirth = dateOfBirth;
-        Age = age;
+        Company = company;
         Job = job;
     }
 
@@ -82,6 +105,7 @@ public class Employee {
                 ", name='" + name + '\'' +
                 ", DateOfBirth=" + DateOfBirth +
                 ", Age=" + Age +
+                ", Company=" + Company +
                 ", Job='" + Job + '\'' +
                 '}';
     }
